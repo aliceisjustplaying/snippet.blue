@@ -1,5 +1,7 @@
 ## Basics
-ALWAYS refer back to `plan.md` in the root directory for the project plan.
+ALWAYS refer back to `plan.md` in the root directory for the project plan.This plan can be updated if needed, but ask me first.
+
+ALWAYS work atomically, each step testable, and each step verifiable.
 
 ## Memory Instructions
 

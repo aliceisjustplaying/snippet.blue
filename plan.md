@@ -378,4 +378,4 @@ Outcome: fully deployable, observable MVP on Cloudflare Workers free tier.
 
 # IMPORTANT NOTE
 
-Step 1 is already done, the project has been created and is deployed to CloudFlare.
+Step 1 is already done, the project has been created and is deployed to CloudFlare, and is connected via the the git/CI integration.
