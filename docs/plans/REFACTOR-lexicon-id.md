@@ -1,0 +1,38 @@
+# Workplan: Refactor Lexicon ID
+
+- **Task ID**: REFACTOR-lexicon-id
+- **Problem Statement**: Change the lexicon identifier from `blue.snippet.code.snippet` to `blue.snippet.code` for brevity and clarity.
+- **Components Involved**:
+  - Lexicon JSON file (`lexicons/blue.snippet.code.snippet.json` -> `lexicons/blue.snippet.code.json`)
+  - `package.json` (npm scripts)
+  - Generated TypeScript types (`src/lexicon-types.ts`)
+  - Test script (`scripts/create-test-snippet.ts`)
+  - Main project plan (`plan.md`)
+  - Existing workplans (`docs/plans/INIT-project-setup.md`, `docs/plans/FEAT-test-publish-script.md`)
+  - Memory file (`memory.md`)
+- **Dependencies**:
+  - Existing lexicon setup.
+- **Implementation Checklist**:
+  - [x] Rename `lexicons/blue.snippet.code.snippet.json` to `lexicons/blue.snippet.code.json`.
+  - [x] Update the `id` field within `lexicons/blue.snippet.code.json` to `blue.snippet.code`.
+  - [x] Update the `lex:gen` script in `package.json` to use `lexicons/blue.snippet.code.json`.
+  - [x] Run `pnpm lex:gen` to regenerate `src/lexicon-types.ts`.
+  - [x] Update `collection` in `scripts/create-test-snippet.ts` to `blue.snippet.code`.
+  - [x] Update `plan.md` to reflect the new lexicon ID and filename.
+  - [x] Update `docs/plans/INIT-project-setup.md` to reflect the new lexicon ID and filename.
+  - [x] Update `docs/plans/FEAT-test-publish-script.md` to reflect the new lexicon ID.
+  - [x] Update `memory.md` with a summary of this refactoring.
+- **Verification Steps**:
+  - Run `pnpm lex:gen` successfully.
+  - Run `pnpm tsx scripts/create-test-snippet.ts` successfully.
+  - Verify a new snippet is posted to Bluesky with the updated lexicon ID (`at://<did>/blue.snippet.code/<rkey>`).
+  - Check `git status` and `git diff` to ensure all intended files are modified correctly and no unintended changes are present.
+- **Decision Authority**:
+  - **Cascade can**: Make all necessary code and documentation changes as outlined.
+  - **User must**: Confirm the changes after execution.
+- **Questions/Uncertainties**:
+  - *Blocking*: None.
+  - *Non-blocking*: None.
+- **Acceptable Tradeoffs**: None.
+- **Status**: Completed
+- **Notes**: This refactoring touches multiple files to ensure consistency across the project. The `revision` number in the lexicon file will remain `1` as the structure of the record itself is not changing, only its identifier and filename.

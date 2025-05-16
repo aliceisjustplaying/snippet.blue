@@ -10,7 +10,7 @@
 		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
 		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
 		"cf-typegen": "wrangler types --env-interface CloudflareBindings ./cloudflare-env.d.ts",
-		"lex:gen": "echo 'lex-gen goes here'"
+		"lex:gen": "lex gen-ts-obj lexicons/blue.snippet.code.json > src/lexicon-types.ts"
 	},
 	"dependencies": {
 		"@opennextjs/cloudflare": "^1.0.3",
@@ -19,15 +19,20 @@
 		"react-dom": "^19.0.0"
 	},
 	"devDependencies": {
+		"@atproto/api": "^0.15.6",
+		"@atproto/lex-cli": "^0.8.1",
 		"@eslint/eslintrc": "^3",
 		"@tailwindcss/postcss": "^4",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
+		"dotenv": "^16.5.0",
 		"eslint": "^9",
 		"eslint-config-next": "15.3.2",
 		"tailwindcss": "^4",
+		"tsx": "^4.19.4",
 		"typescript": "^5",
 		"wrangler": "^4.15.2"
-	}
+	},
+	"packageManager": "pnpm@10.11.0"
 }

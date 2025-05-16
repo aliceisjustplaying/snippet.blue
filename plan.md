@@ -23,7 +23,7 @@ All tests (Vitest + Playwright) run _locally_; the only remote automation is Wor
 |      # | deliverable                                          | build / deploy                                                                        | **local test / feedback loop**                                                                                   |
 | -----: | ---------------------------------------------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 |  **1** | **Scaffold** (Next + Workers)                        | `pnpm create cloudflare@latest blue-snippet-code --framework=next --platform=workers` | `pnpm run dev` → browser shows default Next page                                                                 |
-|  **2** | **Lexicon** file                                     | add `lexicons/blue.snippet.code.snippet.json` (§3)                                    | `pnpm add -D @atproto/cli` → `pnpm lex:gen` → `node -e "require('./src/lexicon-types');console.log('types ok')"` |
+|  **2** | **Lexicon** file                                     | add `lexicons/blue.snippet.code.json` (§3)                                    | `pnpm add -D @atproto/cli` → `pnpm lex:gen` → `node -e "require('./src/lexicon-types');console.log('types ok')"` |
 |  **3** | **Test-publish** script                              | `scripts/create-test-snippet.ts` (code §6-A)                                          | `pnpm tsx scripts/create-test-snippet.ts` → snippet shows on Bluesky web                                         |
 |  **4** | **Cloudflare resources**                             | `wrangler d1 create snippet-index` + KV namespaces                                    | `wrangler d1 execute snippet-index --command "SELECT 1;"` returns `1`                                            |
 |  **5** | **Migration #1**                                     | SQL file §4; `wrangler d1 migrations apply snippet-index`                             | `.schema idx` prints table + index                                                                               |
@@ -86,21 +86,18 @@ All tests (Vitest + Playwright) run _locally_; the only remote automation is Wor
     "HIGHLIGHT_LANGS": "js,ts,py,go,rust,java,cpp,cs,php,rb,swift,kotlin,scala,sh,html,css,json,yaml,toml,sql,md,tex,rs,hs,elixir,erlang,clj,ps1,zsh,lua"
   }
 }
-```
-````
-
 Add secret: `wrangler secret put APP_PWD_KEY`
 
 ---
 
 ## 3 · Lexicon
 
-`lexicons/blue.snippet.code.snippet.json`
+`lexicons/blue.snippet.code.json`
 
 ```jsonc
 {
   "lexicon": 1,
-  "id": "blue.snippet.code.snippet",
+  "id": "blue.snippet.code",
   "revision": 1,
   "type": "record",
   "key": "didSelf",
@@ -111,7 +108,7 @@ Add secret: `wrangler secret put APP_PWD_KEY`
       "name": { "type": "string", "maxLength": 200 },
       "desc": { "type": "string", "maxLength": 1000 },
       "lang": { "type": "string" },
-      "code": { "type": "string", "maxLength": 8192 },
+      "code": { "type": "string", "maxLength": 65536 },
       "createdAt": { "type": "string", "format": "datetime" }
     }
   }
@@ -187,7 +184,7 @@ await agent.login({
 
 await agent.api.com.atproto.repo.createRecord({
   repo: agent.session!.did,
-  collection: "blue.snippet.code.snippet",
+  collection: "blue.snippet.code",
   record: {
     name: "Hello World",
     lang: "ts",
@@ -206,7 +203,7 @@ import { Jetstream } from "@skyware/jetstream";
 import type { BlueSnippetCodeSnippet } from "./lexicon-types";
 
 export class FirehoseIngestor {
-  private jet?: Jetstream<["blue.snippet.code.snippet"]>;
+  private jet?: Jetstream<["blue.snippet.code"]>;
   private cursor?: bigint;
 
   constructor(private state: DurableObjectState, private env: Env) {}
@@ -224,11 +221,11 @@ export class FirehoseIngestor {
 
     this.jet = new Jetstream({
       endpoint: "wss://jetstream.bsky.network/subscribe",
-      wantedCollections: ["blue.snippet.code.snippet"],
+      wantedCollections: ["blue.snippet.code"],
       cursor: this.cursor,
     });
 
-    this.jet.onCreate("blue.snippet.code.snippet", this.onCreate);
+    this.jet.onCreate("blue.snippet.code", this.onCreate);
     this.jet.on("close", () => this.reconnect());
     this.jet.on("error", () => this.reconnect());
 
@@ -291,7 +288,7 @@ export async function handleApi(request: Request, env: Env) {
     const rec = await agent.api.com.atproto.repo
       .getRecord({
         repo: m[1],
-        collection: "blue.snippet.code.snippet",
+        collection: "blue.snippet.code",
         rkey: m[2],
       })
       .then((r) => r.data);

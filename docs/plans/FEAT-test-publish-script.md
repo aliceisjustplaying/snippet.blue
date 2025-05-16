@@ -1,0 +1,38 @@
+# Workplan: Test-Publish Script
+
+- **Task ID**: FEAT-test-publish-script
+- **Problem Statement**: Create a script to publish a test code snippet to Bluesky to verify the lexicon and basic API interaction.
+- **Components Involved**:
+  - Bluesky API (`@atproto/api`)
+  - Environment variables for credentials (`dotenv`)
+  - TypeScript execution (`tsx`)
+  - `blue.snippet.code` lexicon
+- **Dependencies**:
+  - Completion of Lexicon setup (Step 2 in `plan.md`)
+  - `@atproto/api`, `dotenv`, `tsx` packages installed.
+  - Bluesky test account (`test_snippet.bsky.social`) with an app password.
+  - Environment variables `TEST_BSKY_HANDLE` and `TEST_BSKY_APP_PWD` set up (e.g., in a `.env` file).
+- **Implementation Checklist**:
+  - [x] Install `dotenv`, `tsx`, and `@atproto/api` if not already present.
+  - [x] Create `scripts/` directory if it doesn't exist.
+  - [x] Create `scripts/create-test-snippet.ts`.
+  - [x] Implement the script based on `plan.md` section 6-A, using `@atproto/api` to connect to Bluesky and create a record.
+  - [x] Ensure the script loads credentials from environment variables.
+  - [x] Add a `.env.example` file to document required environment variables.
+  - [x] Add `.env` to `.gitignore`.
+- **Verification Steps**:
+  - Create a `.env` file with `TEST_BSKY_HANDLE` and `TEST_BSKY_APP_PWD`.
+  - Run `pnpm tsx scripts/create-test-snippet.ts`.
+  - Verify the script outputs a success message (e.g., "snippet posted").
+  - Check the `test_snippet.bsky.social` account on Bluesky (web or app) to confirm the new snippet post appears correctly.
+- **Decision Authority**:
+  - **Cascade can**: Choose specific variable names if not specified, structure the script for clarity.
+  - **User must**: Provide the actual `TEST_BSKY_HANDLE` and `TEST_BSKY_APP_PWD` values in their local `.env` file.
+- **Questions/Uncertainties**:
+  - *Blocking*: None anticipated.
+  - *Non-blocking*: None anticipated.
+- **Acceptable Tradeoffs**: None identified at this stage.
+- **Status**: In Progress
+- **Notes**:
+  - The script will use the `blue.snippet.code` lexicon ID.
+  - The `randomBytes` import from `node:crypto` is used for generating unique content for testing purposes.
