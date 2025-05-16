@@ -15,6 +15,42 @@
 		"binding": "ASSETS",
 		"directory": ".open-next/assets"
 	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "snippet-index",
+			"database_id": "0249af7d-7afd-4759-862e-33cc6731e9f4"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "SNIPPET_CACHE",
+			"id": "83b2b6fab0f141fb960d813fdd6a9c48",
+			"preview_id": "83b2b6fab0f141fb960d813fdd6a9c48"
+		},
+		{
+			"binding": "APP_PASSWORDS",
+			"id": "44a9ce04d4df4e29af201c4b736f0bb0",
+			"preview_id": "44a9ce04d4df4e29af201c4b736f0bb0"
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{ "name": "FirehoseIngestor", "class_name": "FirehoseIngestor" }
+		]
+	},
+	"triggers": { "crons": ["0 * * * *"] },
+	"vars": {
+		"HIGHLIGHT_LANGS": "js,ts,py,go,rust,java,cpp,cs,php,rb,swift,kotlin,scala,sh,html,css,json,yaml,toml,sql,md,tex,rs,hs,elixir,erlang,clj,ps1,zsh,lua"
+	},
+	"migrations": [
+		{
+			"tag": "v1",
+			"new_classes": [
+				"FirehoseIngestor"
+			]
+		}
+	],
 	"observability": {
 		"enabled": true
 	}

@@ -7,6 +7,8 @@ ALWAYS work atomically, each step testable, and each step verifiable.
 
 IF you find something is wrong in `plan.md` after implementing things ALWAYS update it accordingly.
 
+ALWAYS check your memory in `memory.md` in the root directory for the project plan and for progress on tasks.
+
 ## Memory Instructions
 
 ALWAYS update memory.md with:

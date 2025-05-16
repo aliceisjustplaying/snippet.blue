@@ -44,36 +44,52 @@ All tests (Vitest + Playwright) run _locally_; the only remote automation is Wor
 
 ---
 
-## 2 · `wrangler.json` (Workers + OpenNext)
+## 2 · `wrangler.jsonc` (Workers + OpenNext)
+
+The `wrangler.jsonc` file will be updated to include D1, KV, Durable Objects, triggers, and variables. The base configuration is as follows:
 
 ```jsonc
 {
-  "name": "blue-snippet-code",
-  "main": "src/worker.ts", // custom entrypoint (§6-D)
-  "compatibility_date": "2025-05-16",
-  "compatibility_flags": ["nodejs_compat"],
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "snippet-blue",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
   "assets": {
-    // served by OpenNext
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
   },
+  "observability": {
+    "enabled": true
+  }
+  // Additional configurations for KV, D1, DO, etc. will be added here.
+}
+```
+
+The following sections will be added/updated in `wrangler.jsonc` as part of setting up resources:
+
+```jsonc
+  // ... (existing content from above)
   "kv_namespaces": [
     {
       "binding": "SNIPPET_CACHE",
-      "id": "XXXXXXXXXXXX",
-      "preview_id": "XXXXXXXXXXXX"
+      "id": "<GENERATED_ID>",
+      "preview_id": "<GENERATED_PREVIEW_ID>"
     },
     {
       "binding": "APP_PASSWORDS",
-      "id": "YYYYYYYYYYYY",
-      "preview_id": "YYYYYYYYYYYY"
+      "id": "<GENERATED_ID>",
+      "preview_id": "<GENERATED_PREVIEW_ID>"
     }
   ],
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "snippet-index",
-      "database_id": "ZZZZZZZZZZZZ"
+      "database_id": "<GENERATED_DB_ID>"
     }
   ],
   "durable_objects": {
@@ -85,7 +101,9 @@ All tests (Vitest + Playwright) run _locally_; the only remote automation is Wor
   "vars": {
     "HIGHLIGHT_LANGS": "js,ts,py,go,rust,java,cpp,cs,php,rb,swift,kotlin,scala,sh,html,css,json,yaml,toml,sql,md,tex,rs,hs,elixir,erlang,clj,ps1,zsh,lua"
   }
-}
+  // ... (closing brace if it's a full example)
+```
+
 Add secret: `wrangler secret put APP_PWD_KEY`
 
 ---
